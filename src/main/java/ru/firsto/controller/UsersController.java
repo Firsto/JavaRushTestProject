@@ -44,6 +44,20 @@ public class UsersController {
         return mav;
     }
 
+    @RequestMapping(value = { "/search" }, method = RequestMethod.GET)
+    public ModelAndView search(@RequestParam("name") String name) {
+
+        ModelAndView mav = new ModelAndView("list");
+        List<User> userList = getUsers();
+        List<User> result = new ArrayList<>();
+        for (User user : userList) {
+            if (user.getName().equals(name)) result.add(user);
+        }
+
+        mav.addObject("users", result);
+        return mav;
+    }
+
     @RequestMapping(method = RequestMethod.POST)
     public ModelAndView addUser(String name, Integer age, Boolean isAdmin)
     {
@@ -61,14 +75,14 @@ public class UsersController {
         return new ModelAndView("add");
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
     public ModelAndView delete(@PathVariable("id") Integer id)
     {
         users.delete(id);
         return new ModelAndView("redirect:/");
     }
 
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
     public ModelAndView getUser(@PathVariable("id") Integer id)
     {
         ModelAndView mav = new ModelAndView("edit");
@@ -77,7 +91,7 @@ public class UsersController {
         return mav;
     }
 
-    @RequestMapping(value = {"/{id}"}, method = RequestMethod.POST)
+    @RequestMapping(value = {"/user/{id}"}, method = RequestMethod.POST)
     public ModelAndView editUser(@PathVariable("id") Integer id, String name, Integer age, Boolean isAdmin)
     {
         User user = users.findOne(id);

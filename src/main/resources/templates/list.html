@@ -7,6 +7,12 @@
 </head>
 <body>
 <h1>Userlist:</h1>
+<hr/>
+<form th:action="@{/search/?name=} + ${name}" method="get">
+    <div><label>Search user by name:<input type="text" name="name" placeholder="name"/> </label>
+    <input type="submit" value="Search" /></div>
+</form>
+<hr/>
 <a href="/add"><input type="submit" value="ADD"/></a>
 <table>
     <thead>
@@ -21,11 +27,11 @@
     </thead>
     <tr th:each="user : ${users}">
         <td th:text="${user.id}">1</td>
-        <td><a th:href="${user.id}" th:text="${user.name}">Title ...</a></td>
+        <td><a th:href="@{/user/} + ${user.id}" th:text="${user.name}">Title ...</a></td>
         <td th:text="${user.age}">Text ...</td>
         <td th:text="${user.createdDate}">Text ...</td>
         <td th:text="${user.admin}">Text ...</td>
-        <td><form th:object="${user}" th:action="${user.id}" th:method="delete"><input type="submit" value="DELETE"/></form></td>
+        <td><form th:object="${user}" th:action="@{/user/} + ${user.id}" th:method="delete"><input type="submit" value="DELETE"/></form></td>
     </tr>
 </table>
 </body>
