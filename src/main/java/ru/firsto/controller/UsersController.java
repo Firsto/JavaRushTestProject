@@ -38,9 +38,29 @@ public class UsersController {
 
     @RequestMapping(value = { "/", "/list" }, method = RequestMethod.GET)
     public ModelAndView users() {
-
+        if (users.count() > 15) return paging(1);
         ModelAndView mav = new ModelAndView("list");
         mav.addObject("users", users.findAll());
+        mav.addObject("page", 1);
+        mav.addObject("lastpage", users.count() / 15);
+        return mav;
+    }
+
+    @RequestMapping(value = "/{page}", method = RequestMethod.GET)
+    public ModelAndView paging(@PathVariable("page") Integer page) {
+
+        ModelAndView mav = new ModelAndView("list");
+        List<User> userList = getUsers();
+        int from = (page-1) * 15, to = (page-1) * 15 + 15;
+        if (to > userList.size()) to = userList.size();
+        mav.addObject("users", userList.subList(from, to));
+        mav.addObject("page", page);
+        List<Integer> pages = new ArrayList<>();
+        for (int i = 0; i <= users.count() / 15; i++) {
+            pages.add(i + 1);
+        }
+        mav.addObject("pages", pages);
+        mav.addObject("lastpage", users.count() / 15 + 1);
         return mav;
     }
 
@@ -51,7 +71,7 @@ public class UsersController {
         List<User> userList = getUsers();
         List<User> result = new ArrayList<>();
         for (User user : userList) {
-            if (user.getName().equals(name)) result.add(user);
+            if (user.getName().contains(name)) result.add(user);
         }
 
         mav.addObject("users", result);
@@ -61,8 +81,8 @@ public class UsersController {
     @RequestMapping(method = RequestMethod.POST)
     public ModelAndView addUser(String name, Integer age, Boolean isAdmin)
     {
-        if (name.isEmpty()) name = "Anonymous";
-        if (age == null) age = 0;
+        if (name.isEmpty()) name = "Anonymous" + "#" + ((int) (Math.random() * 123456));
+        if (age == null) age = (int) (Math.random() * 100);
         if (isAdmin == null) isAdmin = false;
 
         users.save(new User(name, age, isAdmin, new Timestamp(new Date().getTime())));
