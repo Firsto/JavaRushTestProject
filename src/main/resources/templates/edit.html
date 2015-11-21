@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <title>Edit user</title>
+</head>
+<body>
+<h1>Edit user:</h1>
+<form th:action="@{/} + ${user.id}" method="post">
+    <input type="hidden" name="id" th:value="${user.id}"/>
+    <div><label> User Name : <input type="text" name="name" th:value="${user.name}"/> </label></div>
+    <div><label> Age: <input type="number" name="age" th:value="${user.age}"/> </label></div>
+    <div><label> Admin: <input type="checkbox" name="isAdmin" th:checked="${user.admin}"/> </label></div>
+    <div><input type="submit" value="Save"/></div>
+</form>
+</body>
+</html>

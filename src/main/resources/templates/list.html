@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
+<head>
+    <meta charset="UTF-8"/>
+    <title></title>
+</head>
+<body>
+<h1>Userlist:</h1>
+<a href="/add"><input type="submit" value="ADD"/></a>
+<table>
+    <thead>
+    <tr>
+        <td>#</td>
+        <td>NAME</td>
+        <td>AGE</td>
+        <td>CREATED</td>
+        <td>ADMIN</td>
+        <td>DELETE</td>
+    </tr>
+    </thead>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}">1</td>
+        <td><a th:href="${user.id}" th:text="${user.name}">Title ...</a></td>
+        <td th:text="${user.age}">Text ...</td>
+        <td th:text="${user.createdDate}">Text ...</td>
+        <td th:text="${user.admin}">Text ...</td>
+        <td><form th:object="${user}" th:action="${user.id}" th:method="delete"><input type="submit" value="DELETE"/></form></td>
+    </tr>
+</table>
+</body>
+</html>
